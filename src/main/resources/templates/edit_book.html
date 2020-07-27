@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edit book</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" th:href="@{/images/icons/fav.ico}" type="image/x-icon">
+<link
+	href="https://fonts.googleapis.com/css?family=Josefin+Sans:300i,400,700"
+	rel="stylesheet">
+<link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+<link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+<link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+<link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+<link rel="stylesheet" th:href="@{/css/lightgallery.min.css}">
+
+<link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.css}">
+
+<link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+
+<link rel="stylesheet" th:href="@{/css/swiper.css}">
+
+<link rel="stylesheet" th:href="@{/css/aos.css}">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+	<div class="site-wrap">
+
+		<div class="site-mobile-menu">
+			<div class="site-mobile-menu-header">
+				<div class="site-mobile-menu-close mt-3">
+					<span class="icon-close2 js-menu-toggle"></span>
+				</div>
+			</div>
+			<div class="site-mobile-menu-body"></div>
+		</div>
+
+
+
+
+				<header class="site-navbar py-3" role="banner">
+
+			<div class="container-fluid">
+				<div class="row align-items-center">
+
+					<div class="col-6 col-xl-2" data-aos="fade-down">
+						<h1 class="mb-0">
+							<a th:href="@{/books}" class="text-black h2 mb-0">Panda</a>
+						</h1>
+					</div>
+					<div class="col-10 col-md-8 d-none d-xl-block" data-aos="fade-down">
+						<nav
+							class="site-navigation position-relative text-right text-lg-center"
+							role="navigation">
+
+							<ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
+								<li class="active"><a th:href="@{/books}">Home</a></li>
+								<li class="active"><div th:if="${role == true}"><a th:href="@{/user/edit}">User</a></div></li>
+								<li class="active"><div th:if="${role == true}"><a th:href="@{/genre}">Genre</a></div></li>
+								<li class="active"><a th:href="@{/books/new}">Add book</a></li>
+								<li class="active">
+									<form th:action="@{/search}" method="post">
+										<input type="text" name="search"/>
+										<button type="submit">Search</button>
+									</form>
+								</li>
+								<li class="active"><a th:href="@{/logout}">Log out</a></li>
+
+							</ul>
+						</nav>
+					</div>
+
+
+				</div>
+			</div>
+
+		</header>
+
+
+		<form th:action="@{/saveBook}" th:object="${book}" method="post"
+			id="formNew">
+			<div class="" data-aos="fade">
+
+				<div class="container-fluid">
+
+					<div class="row justify-content-center">
+
+						<div class="col-md-7">
+							<div class="row mb-5 site-section">
+								<div class="col-12 ">
+									<h2 class="site-section-heading text-center">
+										<input type="text" th:field="*{title}"
+											style="text-align: center; outline: none;" required="required"/>
+									</h2>
+								</div>
+							</div>
+
+							<div class="row mb-5">
+								<div class="col-md-7">
+									<img th:src="${book.getThumnailPath()}" alt="Images"
+										style="width: 500px; height: 500px;" class="img-fluid">
+								</div>
+								<div class="col-md-4 ml-auto">
+									<input type="text" th:field="*{bookID}" class="form-control"
+										readonly="readonly" /> <input type="text"
+										th:field="*{thumnailPath}" class="form-control" hidden="true" />
+									<input type="text" th:field="*{author}" class="form-control" />
+									<textarea th:field="*{detailContent}" class="form-control"
+										form="formNew" rows="4"></textarea>
+									<div class="row form-group">
+
+										<div class="col-md-12">
+											<label class="text-black">Must login</label> <input
+												type="checkbox" th:field="*{mustLogin}">
+										</div>
+									</div>
+									<th:block>
+										<tr>
+											<td>Genre:</td>
+											<th:block th:each="genre : ${listGenre}">
+												<input type="checkbox" th:value="${genre.genre}" name="list"
+													style="padding: 30px" checked readonly="readonly" />
+												<td th:text="${genre.genre}"></td>
+											</th:block>
+										</tr>
+									</th:block>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12" align="center">
+									<input type="submit" value="Save"
+										class="btn btn-primary py-2 px-4 text-white">
+								</div>
+							</div>
+							<table border="1" cellpadding="10" align="center">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Chapter Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="chap : ${listChaps}">
+										<td th:text="${chap.chapterID}" class="text-black">ID</td>
+										<td th:text="${chap.chapterName}" class="text-black">Name</td>
+										<td><a
+											th:href="@{/chapter/edit/{id}(id=${chap.chapterID})}">Edit</a></td>
+										<td><a
+											th:href="@{/chapter/delete/{id}(id=${chap.chapterID})}">Delete</a></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="col-md-12" align="center">
+								<a th:href="@{/chapter/new/{id}(id=${bookID})}">Add new
+									chapter</a> <br />
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+		</form>
+
+		<div class="footer py-4">
+			<div class="container-fluid text-center">
+				<p>
+					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					Copyright &copy;
+					<script data-cfasync="false"
+						src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+					<script>
+						document.write(new Date().getFullYear());
+					</script>
+					All rights reserved | This template is made with <i
+						class="icon-heart-o" aria-hidden="true"></i> by <a
+						href="https://colorlib.com" target="_blank">Colorlib</a>
+					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+				</p>
+			</div>
+		</div>
+
+
+
+
+
+	</div>
+
+	<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+	<script th:src="@{/js/jquery-migrate-3.0.1.min.js}"></script>
+	<script th:src="@{/js/jquery-ui.js}"></script>
+	<script th:src="@{/js/popper.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/owl.carousel.min.js}"></script>
+	<script th:src="@{/js/jquery.stellar.min.js}"></script>
+	<script th:src="@{/js/jquery.countdown.min.js}"></script>
+	<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+	<script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+	<script th:src="@{/js/swiper.min.js}"></script>
+	<script th:src="@{/js/aos.js}"></script>
+
+	<script th:src="@{/js/picturefill.min.js}"></script>
+	<script th:src="@{/js/lightgallery-all.min.js}"></script>
+	<script th:src="@{/js/jquery.mousewheel.min.js}"></script>
+
+	<script th:src="@{/js/main.js}"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('#lightgallery').lightGallery();
+		});
+	</script>
+
+</body>
+</html>
